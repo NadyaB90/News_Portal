@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+<h1>Публикация</h1>
+{{ post }}
+    <hr>
+    {% if post %}
+        <table>
+            <tr>
+                <tr><h3>
+                    {{ post.title }}
+                </h3></tr>
+                <tr><p><i>
+                    {{ post.created_date|date:'d M Y H:i' }}
+                </i></p></tr>
+                <tr>
+                    {{ post.text|censor }}
+                </tr>
+            </tr>
+        </table>
+    {% else %}
+        <h2>Новостей и публикаций нет!</h2>
+    {% endif %}
+{% endblock content %}
