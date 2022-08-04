@@ -1,9 +1,5 @@
 from datetime import datetime
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
-from win32ui import CreateView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .filters import PostFilter
 from .forms import PostForm
 from .models import Post, Category
@@ -15,10 +11,6 @@ class PostsList(ListView):
     ordering = ['-created_date']
     context_object_name = 'news'
     paginate_by = 10
-
-    def __init__(self, **kwargs):
-        super().__init__(kwargs)
-        self.filterset = None
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -63,6 +55,22 @@ class PostCreateView(CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
+
+
+class PostUpdateView(UpdateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+
+class PostDeleteView(DeleteView):
+    template_name = 'post_delete.html'
+    form_class = PostForm
+    queryset = Post.objects.all()
+    success_url = '/news/'
 
 
 
