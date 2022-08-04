@@ -44,10 +44,6 @@ class Post(models.Model):
     text = models.TextField()
     post_rate = models.IntegerField(default=0)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
-        self.id = None
-
     def like(self):
         self.post_rate += 1
         self.save()
@@ -59,8 +55,11 @@ class Post(models.Model):
     def preview(self):
         return self.text[:125] + '...'
 
+    def __str__(self):
+        return f'{self.title}. {self.text[:10]} ...'
+
     def get_absolute_url(self):
-        return reverse('post_detail', args=[str(self.id)])
+        return f'/news/{self.id}'
 
 
 class PostCategory(models.Model):
@@ -82,5 +81,7 @@ class Comment(models.Model):
     def dislike(self):
         self.comment_rate -= 1
         self.save()
+
+
 
 
