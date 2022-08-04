@@ -9,18 +9,19 @@ News
 {% block content %}
 <h1>Все Новости</h1>
 {{news}}
+<h4> Количество всех публикаций: {{ news|length }} </h4>
 
  <hr>
  {% if news %}
       <table>
            <tr>
-               <td>Заголовок</td>
-               <td>Дата публикации</td>
-               <td>Текст</td>
+               <td><h4>Заголовок</h4></td>
+               <td><h4>Дата публикации</h4></td>
+               <td><h4>Текст</h4></td>
            </tr>
           {% for post in news %}
            <tr>
-               <td>{{ post.title }}</td>
+               <td>{{ post.title|censor }}</td>
                <td>{{ post.created_date|date:'d M Y'}}</td>
                <td>{{ post.text|truncatechars:20|censor }}</td>
            </tr>
@@ -45,5 +46,12 @@ News
            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
        {% endif %}
    {% endif %}
+
+<br>
+<br>
+<button> <a class="nav-link" href="{% url 'post_create' %}">Добавить новую публикацию</a> </button>
+<br>
+<br>
+<button> <a class="nav-link" href="/news/search/">Поиск</a> </button>
 
 {% endblock content %}
