@@ -22,9 +22,19 @@ Post
                 <tr>
                     {{ post.text|censor }}
                 </tr>
+<br>
+            <a href="{%url 'post_delete' post.id%}" class="btn btn-danger">Удалить</a>
+<a href="{%url 'post_update' post.id%}" class="btn btn-info">Редактировать</a>
+
             </tr>
         </table>
     {% else %}
+
         <h2>Новостей и публикаций нет!</h2>
     {% endif %}
+<br>
+<hr>
+<br>
+<button> <a class="nav-link" href="/news/">Вернуться</a> </button>
+
 {% endblock content %}
