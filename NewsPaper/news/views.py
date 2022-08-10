@@ -1,8 +1,7 @@
 from datetime import datetime
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
-from win32ui import CreateView
+
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .filters import PostFilter
 from .forms import PostForm
 from .models import Post, Category
@@ -54,10 +53,27 @@ class SearchList(ListView):
         return context
 
 
-class PostCreateView(CreateView):
+class PostCreateView(PermissionRequiredMixin, CreateView):
     form_class = PostForm
+    permission_required = ('news.add_post',)
     model = Post
     template_name = 'post_create.html'
 
 
+class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+    permission_required = ('news.change_post',)
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+
+class PostDeleteView(PermissionRequiredMixin, DeleteView):
+    template_name = 'post_delete.html'
+    form_class = PostForm
+    permission_required = ('news.delete_post',)
+    queryset = Post.objects.all()
+    success_url = '/news/'
 
